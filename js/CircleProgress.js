@@ -225,7 +225,6 @@ function createPalette(colorStops) {
 	palatteCanvas.height = height;
 	const ctx = palatteCanvas.getContext("2d");
 
-	document.body.appendChild(palatteCanvas);
 	// 创建线性渐变色
 	const linearGradient = ctx.createLinearGradient(0, 0, width, 0);
 	for (const key in colorStops) {
