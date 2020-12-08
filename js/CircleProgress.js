@@ -37,9 +37,9 @@ function init(options, option) {
 		option.h = canvas.height;
 		canvas.style.transform = `scale(${1/option.precision})`;
 		canvas.style.width = `${option.precision}00%`;
-		option.ss = options.startAngle || defaultOption.ss;
+		option.ss = (typeof options.startAngle === 'undefined')? defaultOption.ss:options.startAngle;
 		option.type = options.type || defaultOption.type;
-		option.tt = options.endAngle || defaultOption.tt;
+		option.tt = (typeof options.endAngle === 'undefined')? defaultOption.tt:options.endAngle;
 		option.interval = options.interval || defaultOption.interval;
 		option.total = options.duration || defaultOption.total;
 

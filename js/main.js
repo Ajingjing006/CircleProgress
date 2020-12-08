@@ -31,8 +31,8 @@ function doDraw(e) {
 		r: 100, //默认100，半径
 		w: 500, //画布宽，默认500
 		h: 500, //画布高，默认500
-		startAngle: -20, //起始角度，默认180
-		endAngle: 300, //终止角度，必须传
+		startAngle: 360, //起始角度，默认180
+		endAngle: 0, //终止角度，必须传
 		interval: 16, //帧间隔时间，默认5ms
 		duration: 4000, //动画时间，默认2000
 		lineWidth: 16, //描边线宽度，默认15
