@@ -1,5 +1,5 @@
 import CircleProgress from './CircleProgress.js';
-
+import Tool from './util.js';
 window.addEventListener('pageshow', doDraw);
 window.addEventListener('visibilitychange', (e)=>{
 	if (document.visibilityState === 'visible') {
