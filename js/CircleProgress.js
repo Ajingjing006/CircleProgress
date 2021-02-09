@@ -1,8 +1,10 @@
 import Tool from './util.js';
+import Palette from './Palette.js';
+
 class CircleProgress {
 	constructor(options) {
 		this.option = {};
-		init.call(this, options, this.option);
+		init(options, this.option);
 	}
 }
 
@@ -49,7 +51,7 @@ function setOption(options, option, canvas) {
 	option.precision = options.precision || 2;
 	option.precision = Math.min(Math.round(option.precision), 4);
 	option.ctx = canvas.getContext('2d');
-	option.palette = createPalette(options.colors || defaultOption.colors);
+	option.palette = new Palette(options.colors || defaultOption.colors);
 	
 	option.w = options.w * option.precision;
 	option.h = options.h * option.precision;
@@ -227,38 +229,6 @@ function getPoint(x0, y0, r, angle) {
 	const x = Math.cos(angle) * r + x0;
 	const y = Math.sin(angle) * r + y0;
 	return [x, y];
-}
-
-//渐变色调色盘
-function createPalette(colorStops) {
-	const width = 256,
-		height = 20;
-
-	// 创建canvas
-	const palatteCanvas = document.createElement("canvas");
-	palatteCanvas.width = width;
-	palatteCanvas.height = height;
-	const ctx = palatteCanvas.getContext("2d");
-
-	// 创建线性渐变色
-	const linearGradient = ctx.createLinearGradient(0, 0, width, 0);
-	for (const key in colorStops) {
-		linearGradient.addColorStop(key, colorStops[key]);
-	}
-
-	// 绘制渐变色条
-	ctx.fillStyle = linearGradient;
-	ctx.fillRect(0, 0, width, height);
-
-	// 读取像素值
-	const imageData = ctx.getImageData(0, 0, width, 1).data;
-
-	return {
-		canvas: palatteCanvas,
-		pickColor: function (pos) {
-			return imageData.slice(pos * 4, pos * 4 + 4);
-		}
-	}
 }
 
 export default CircleProgress;
