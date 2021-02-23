@@ -32,6 +32,7 @@ class Tool {
 		}
 	}
 
+	//角度转弧度值
 	static angleToRadian(angle) {
 		return angle / 180 * Math.PI;
 	}

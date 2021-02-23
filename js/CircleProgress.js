@@ -3,8 +3,13 @@ import Palette from './Palette.js';
 
 class CircleProgress {
 	constructor(options) {
-		this.option = {};
-		init(options, this.option);
+		const canvas = Tool.getDom(`#${options.canvasId}`);
+		if (canvas) {
+			let option = setOption(options, canvas);
+			setCanvasStyle(option, canvas);
+			setLineStyle(option);
+			startDraw(option);
+		}
 	}
 }
 
@@ -27,18 +32,10 @@ const defaultOption = {
 	precision: 2
 }
 
-function init(options, option) {
-	const canvas = Tool.getDom(`#${options.canvasId}`);
-	if (canvas) {
-		setOption(options, option, canvas);
-		setCanvasStyle(canvas, option);
-		setLineStyle(option);
-		startDraw(option);
-	}
-}
+
 
 //配置画布的显示样式
-function setCanvasStyle(canvas, option) {
+function setCanvasStyle(option, canvas) {
 	canvas.width = option.w;
 	canvas.height = option.h;
 	canvas.style.transform = `scale(${1/option.precision})`;
@@ -47,9 +44,9 @@ function setCanvasStyle(canvas, option) {
 }
 
 //配置使用的数据参数
-function setOption(options, option, canvas) {
-	option.precision = options.precision || 2;
-	option.precision = Math.min(Math.round(option.precision), 4);
+function setOption(options, canvas) {
+	let option = {};
+	option.precision = Math.min(Math.round(options.precision || 2), 4);
 	option.ctx = canvas.getContext('2d');
 	option.palette = new Palette(options.colors || defaultOption.colors);
 	
@@ -120,7 +117,7 @@ function drawArc(option, count) {
 	ctx.arc(option.w / 2, option.h / 2, option.r * option.precision, d, c, !option.clockwise);
 	ctx.stroke();
 	//画进度条
-	if (false) {
+	if (true) {
 		splitArc(option, option.w / 2, option.h / 2, option.r * option.precision, start, end);
 	} else {
 		start = Tool.angleToRadian(start); //使用弧度
