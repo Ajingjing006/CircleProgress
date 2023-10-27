@@ -1,0 +1,17 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+.graph-cont {
+    display: flex;
+    width: 100%;
+}
+.graph-cont > div {
+    position: relative;
+    width: 500px;
+}
+.graph-cont canvas {
+    border: 1px solid black;
+    width: 200px;
+    height: 200px;
+}

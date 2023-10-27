@@ -1,0 +1,13 @@
+{
+    "name": "circleprogress",
+    "version": "1.0.0",
+    "description": "环形进度条。只有图形，没有刻度和文字。\r 主要是为了实现渐变色环形条。\r 渐变颜色可配，速度可配置。更多信息看示例",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
