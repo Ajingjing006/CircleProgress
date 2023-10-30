@@ -4,6 +4,8 @@ import Palette from './Palette.js';
 // totalFramesLength; //一共绘制帧数
 // angleChangeForFrame; //每帧变化角度数
 const precision = 2; //增长一倍，提升精细程度
+const angleDistance1 = 1;
+const angleDistance2 = 1.6;
 //配置画布的显示样式
 const setCanvasStyle = (option, canvas) => {
     canvas.width = option.width;
@@ -20,8 +22,8 @@ const setLineStyle = option => {
     const ctx = option.ctx;
     ctx.lineWidth = option.lineWidth;
     ctx.globalAlpha = 1; //画布默认透明度
-    ctx.lineCap = 'round'; //线末端样式square，round butt(默认)
-    ctx.lineJoin = 'round'; //bevel round miter(默认)
+    ctx.lineCap = 'round'; //线末端样式square，round butt(默认)//使用round，导致实际起止点的绘制有移除
+    // ctx.lineJoin = 'round'; //bevel round miter(默认)
 };
 
 //动态画图
@@ -66,8 +68,11 @@ const drawArc = (option, currentFrameIndex) => {
         clockwise,
         angleChangeForFrame,
     } = option;
-    const endAngle = startAngle + currentFrameIndex * angleChangeForFrame;
-    console.log(startAngle);
+    let endAngle = startAngle + currentFrameIndex * angleChangeForFrame;
+    if (Math.abs(endAngle - option.endAngle) < Math.abs(angleChangeForFrame)) {
+        //修正边界计算值溢出
+        endAngle = option.endAngle;
+    }
     ctx.clearRect(0, 0, width, height);
 
     //画默认背景圆
@@ -84,6 +89,18 @@ const drawArc = (option, currentFrameIndex) => {
     ctx.closePath();
     //画进度条
     splitArc(option, x, y, r, startAngle, endAngle);
+    //绘制十字辅助线，判断角度
+    if (true) {
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#f00';
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+        setLineStyle(option);
+    }
 };
 
 //画渐变弧线队列
@@ -92,16 +109,25 @@ const splitArc = (option, x, y, r, start, end) => {
     const { ctx, clockwise, palette } = option;
     const splitTotal = Math.abs(end - start); //切分总数【要画的小弧线总个数】每度一个
     const _j = clockwise ? 1 : -1; //根据绘制方向【逆时针、顺时针】增减
-    for (let i = 0; i < splitTotal; i++) {
+    for (let i = 0; i < splitTotal; ) {
         const color = palette.pickColor(Math.round((i * 255) / splitTotal));
         ctx.beginPath();
         setStrokeStyle(ctx, color);
+        const _start = start + i * _j; //小片弧线的起始角度
+        let _end = _start + _j; //小片弧线的结束角度
+        const mod = Math.abs(_start) % 90; //看角度所处区域
+        if (mod > 20 || mod < 70) {
+            _end = _start + angleDistance2 * _j;
+            i += angleDistance2;
+        } else {
+            i += angleDistance1;
+        }
         ctx.arc(
             x,
             y,
             r,
-            angleToRadian(start + i * _j),
-            angleToRadian(start + (i + 1) * _j),
+            angleToRadian(_start),
+            angleToRadian(_end),
             !clockwise
         );
         ctx.stroke();
