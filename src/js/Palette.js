@@ -1,3 +1,4 @@
+import { createNewCanvas } from './util.js';
 const getLinearGradient = (canvas, colors) => {
     // 创建线性渐变色
     const linearGradient = canvas
@@ -9,7 +10,7 @@ const getLinearGradient = (canvas, colors) => {
     return linearGradient;
 };
 
-const getCanvasImageData = colors => {
+const getPalatteCanvasImageData = colors => {
     // 创建canvas
     const palatteCanvas = createNewCanvas();
     //拿到上下文
@@ -22,16 +23,6 @@ const getCanvasImageData = colors => {
         .data;
 };
 
-const createNewCanvas = (width = 256, height = 1) => {
-    if (typeof OffscreenCanvas != 'undefined') {
-        return new OffscreenCanvas(width, height);
-    }
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    return canvas;
-};
-
 class Palette {
     constructor(
         colors = [
@@ -39,7 +30,7 @@ class Palette {
             [1, '#fff'],
         ]
     ) {
-        this.imageData = getCanvasImageData(colors);
+        this.imageData = getPalatteCanvasImageData(colors);
     }
 
     pickColor(pos) {

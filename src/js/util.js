@@ -12,3 +12,13 @@ export const negate =
 export const angleToRadian = angle => (angle / 180) * Math.PI;
 
 export const getPureObject = () => Object.create(null);
+
+export const createNewCanvas = (width = 256, height = 1) => {
+    if (typeof OffscreenCanvas !== 'undefined') {
+        return new OffscreenCanvas(width, height);
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    return canvas;
+};
